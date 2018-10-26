@@ -175,7 +175,13 @@ extension PullToRefresh {
                 } else if state != .loading && state != .finished {
                     state = .releasing(progress: 1)
                 }
-            default: break
+            default:
+                if offset > 0 {
+                    if state != .loading && state != .finished && state != .initial {
+                        state = .initial
+                    }
+                }
+                break
             }
         } else if (context == &KVO.context && keyPath == KVO.ScrollViewPath.contentSize && object as? UIScrollView == scrollView) {
             if case .bottom = position {
